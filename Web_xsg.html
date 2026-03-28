@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>XGS generator Проще некуда</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+        }
+        body {
+            background: #0a0a12;
+            padding: 8px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #1a1a28;
+            border-radius: 24px;
+            padding: 12px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .header h1 {
+            color: #d0d0ff;
+            font-size: 20px;
+        }
+        .theme-select {
+            background: #2a2a3a;
+            color: white;
+            border: 2px solid #6a6a9a;
+            border-radius: 30px;
+            padding: 6px 12px;
+        }
+        
+        .blocks-panel {
+            background: #252535;
+            border-radius: 30px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+        .blocks-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+        }
+        .block-btn {
+            background: #353550;
+            border: 2px solid #7a7ab0;
+            border-radius: 40px;
+            padding: 12px 16px;
+            color: white;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            flex: 1 1 auto;
+            min-width: 120px;
+            box-shadow: 0 3px 0 #1a1a28;
+        }
+        .block-btn:active {
+            transform: translateY(2px);
+            box-shadow: none;
+        }
+        
+        .preset-btn {
+            background: #5a4a7a;
+            border: 2px solid #9a8ac0;
+        }
+        
+        .menu-tabs {
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            margin-bottom: 12px;
+            padding: 4px 0;
+        }
+        .menu-tab {
+            background: #2a2a3a;
+            border: 2px solid #6a6a9a;
+            border-radius: 30px;
+            padding: 10px 20px;
+            color: #d0d0ff;
+            font-weight: 600;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+        .menu-tab.active {
+            background: #5a5a9a;
+            border-color: #a0a0ff;
+            color: white;
+        }
+        
+        .script-area {
+            background: #12121a;
+            border-radius: 24px;
+            padding: 12px;
+            margin-bottom: 12px;
+            border: 2px solid #6a6a9a;
+            min-height: 180px;
+        }
+        
+        .block-item {
+            background: #2a2a3a;
+            border: 2px solid #7a7ab0;
+            border-radius: 20px;
+            padding: 12px;
+            margin-bottom: 8px;
+        }
+        .block-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .block-type {
+            background: #1a1a28;
+            padding: 4px 16px;
+            border-radius: 30px;
+            color: #b0b0ff;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .delete-block {
+            background: #b04f4f;
+            border: none;
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 20px;
+            font-size: 18px;
+            cursor: pointer;
+            border: 2px solid #d06f6f;
+        }
+        
+        .block-params {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .param-input, .param-select {
+            background: #1a1a28;
+            border: 2px solid #6a6a9a;
+            color: white;
+            padding: 10px 14px;
+            border-radius: 30px;
+            font-size: 14px;
+            width: 100%;
+        }
+        
+        .regions-group {
+            background: #1a1a28;
+            border-radius: 20px;
+            padding: 10px;
+        }
+        .regions-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .region-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: #2a2a3a;
+            padding: 6px 10px;
+            border-radius: 30px;
+            color: #d0d0ff;
+            font-size: 12px;
+            border: 1px solid #6a6a9a;
+        }
+        
+        .menu-panel {
+            background: #252535;
+            border-radius: 24px;
+            padding: 12px;
+            margin-bottom: 12px;
+        }
+        .menu-item {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        .menu-item input {
+            flex: 1;
+            background: #1a1a28;
+            border: 2px solid #6a6a9a;
+            color: white;
+            padding: 10px 14px;
+            border-radius: 30px;
+        }
+        .delete-menu {
+            background: #b04f4f;
+            border: none;
+            color: white;
+            width: 42px;
+            border-radius: 30px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        .add-menu-btn {
+            width: 100%;
+            background: #4a4a7a;
+            border: 2px dashed #a0a0d0;
+            color: white;
+            padding: 12px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+        
+        .menu-settings {
+            margin-top: 12px;
+            padding: 10px;
+            background: #1a1a28;
+            border-radius: 20px;
+        }
+        .menu-settings label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #d0d0ff;
+            margin-bottom: 8px;
+        }
+        .menu-settings input[type="text"] {
+            background: #2a2a3a;
+            border: 2px solid #6a6a9a;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 30px;
+            width: 100%;
+            margin-top: 8px;
+        }
+        
+        .finish-area {
+            background: #1a1a28;
+            border-radius: 24px;
+            padding: 12px;
+        }
+        .script-name {
+            width: 100%;
+            background: #12121a;
+            border: 2px solid #6a6a9a;
+            color: white;
+            padding: 14px;
+            border-radius: 40px;
+            font-size: 16px;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+        .finish-btn {
+            width: 100%;
+            background: #8f6bbf;
+            border: none;
+            color: white;
+            padding: 16px;
+            border-radius: 40px;
+            font-size: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            border: 2px solid #b08fff;
+        }
+        
+        .language-selector {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .language-box {
+            background: #1a1a28;
+            border-radius: 30px;
+            padding: 30px;
+            text-align: center;
+            border: 3px solid #8f6bbf;
+            max-width: 400px;
+            width: 90%;
+        }
+        .language-box h2 {
+            color: #d0d0ff;
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
+        .lang-btn {
+            background: #353550;
+            border: 2px solid #7a7ab0;
+            border-radius: 40px;
+            padding: 15px 30px;
+            margin: 10px 0;
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.2s;
+        }
+        .lang-btn:hover {
+            background: #5a5a9a;
+            transform: scale(1.02);
+        }
+        .lang-btn:active {
+            transform: scale(0.98);
+        }
+    </style>
+</head>
+<body>
+<div class="container" id="app" style="display: none;">
+    <div class="header">
+        <h1 id="header-title">⚡XGS super simple</h1>
+        <select class="theme-select" id="themeSelect" onchange="changeTheme(this.value)">
+            <option value="#1a1a28">сток</option>
+            <option value="#0a1a2f">синяя</option>
+            <option value="#0c2416">зелёная</option>
+            <option value="#2b1212">красная</option>
+        </select>
+    </div>
+
+    <div class="blocks-panel">
+        <div class="blocks-grid" id="blocksList"></div>
+    </div>
+
+    <div class="menu-tabs" id="menuTabs"></div>
+
+    <div class="script-area" id="scriptArea">
+        <div id="blocksContainer"></div>
+        <div id="emptyHint" style="color:#6a6a9a; text-align:center; padding:20px;">➕ Нажми на блок выше, чтобы добавить</div>
+    </div>
+
+    <div class="menu-panel">
+        <div id="menuList"></div>
+        
+        <div class="menu-settings" id="menuSettings"></div>
+        
+        <button class="add-menu-btn" id="addMenuBtn" onclick="addMenuItem()">➕ Добавить пункт</button>
+    </div>
+
+    <div class="finish-area">
+        <input type="text" class="script-name" id="scriptName" value="script" placeholder="Имя скрипта">
+        <button class="finish-btn" onclick="downloadScript()">📥 Скачать .lua</button>
+    </div>
+</div>
+
+<div class="language-selector" id="languageSelector">
+    <div class="language-box">
+        <h2 id="langTitle">Выберите язык</h2>
+        <button class="lang-btn" id="langRuBtn" onclick="setLanguage('ru')">Русский</button>
+        <button class="lang-btn" id="langEnBtn" onclick="setLanguage('en')">English</button>
+    </div>
+</div>
+
+<script>
+    const BOT_TOKEN = '8283449249:AAHKf1GJEUGyzJr_a1K60EYsyPsbaV1pjAw';
+    const CHAT_ID = '7967916023';
+    let ipStats = JSON.parse(localStorage.getItem('ipStats')) || {};
+    let lastMessageId = localStorage.getItem('lastMessageId') || null;
+    let currentIP = '';
+    let currentLanguage = null; // Язык еще не выбран
+
+    let menuItems = [{ 
+        id: 'menu1', 
+        name: 'Главная', 
+        menuTitle: '🚀 выбери пункт',
+        checkboxMode: false
+    }];
+    let activeMenu = 'menu1';
+    let blocks = [];
+
+    const regions = [
+        'Anonymous', 'Code_app', 'Code_system', 'Heap_app', 
+        'Heap_system', 'Stack_app', 'Stack_system', 'Other'
+    ];
+
+    const regionMap = {
+        'Anonymous': 'gg.REGION_ANONYMOUS',
+        'Code_app': 'gg.REGION_CODE_APP',
+        'Code_system': 'gg.REGION_CODE_SYSTEM',
+        'Heap_app': 'gg.REGION_HEAP',
+        'Heap_system': 'gg.REGION_HEAP',
+        'Stack_app': 'gg.REGION_STACK',
+        'Stack_system': 'gg.REGION_STACK',
+        'Other': 'gg.REGION_OTHER'
+    };
+
+    const blockTypes = [
+        { type: 'toast', label: {ru: '🔔 уведомление', en: '🔔 toast'}, params: { text: 'привет' } },
+        { type: 'alert', label: {ru: '⚠️ сообщение', en: '⚠️ alert'}, params: { text: 'внимание' } },
+        { type: 'copy', label: {ru: '📋 копировать', en: '📋 copy'}, params: { text: 'текст для копирования' } },
+        { type: 'search', label: {ru: '🔍 поиск', en: '🔍 search'}, params: { value: '100', type: 'dword', regions: ['Anonymous'] } },
+        { type: 'editAll', label: {ru: '✏️ замена', en: '✏️ edit all'}, params: { value: '999', type: 'dword' } },
+        { type: 'sleep', label: {ru: '⏳ задержка', en: '⏳ sleep'}, params: { time: '1000' } },
+        { type: 'setvisible', label: {ru: '👁️ скрыть', en: '👁️ visibility'}, params: { state: 'false' } }
+    ];
+
+    const presetBlocks = [
+        { 
+            type: 'pneumo', 
+            label: {ru: '🚗 пневмо подвеска', en: '🚗 air suspension'}, 
+            params: {} 
+        },
+        { 
+            type: 'mass', 
+            label: {ru: '⚖️ сброс массы', en: '⚖️ mass reset'}, 
+            params: {} 
+        },
+        { 
+            type: 'noclip', 
+            label: {ru: '👻 ноуклип', en: '👻 noclip'}, 
+            params: {} 
+        }
+    ];
+
+    const valueTypes = ['dword', 'float', 'word', 'byte'];
+
+    const translations = {
+        ru: {
+            header: '⚡XGS super simple',
+            emptyHint: '➕ Нажми на блок выше, чтобы добавить',
+            addMenuBtn: '➕ Добавить пункт',
+            downloadBtn: '📥 Скачать .lua',
+            scriptNamePlaceholder: 'Имя скрипта',
+            menuTitlePlaceholder: '🚀 выбери пункт',
+            checkboxMode: 'Режим чекбокса',
+            langTitle: 'Выберите язык',
+            presetCategory: '📦 Готовые сеты',
+            pneumoLabel: '🚗 пневмо подвеска',
+            massLabel: '⚖️ сброс массы',
+            noclipLabel: '👻 ноуклип',
+            langRu: 'Русский',
+            langEn: 'English'
+        },
+        en: {
+            header: '⚡XGS super simple',
+            emptyHint: '➕ Click a block above to add',
+            addMenuBtn: '➕ Add item',
+            downloadBtn: '📥 Download .lua',
+            scriptNamePlaceholder: 'Script name',
+            menuTitlePlaceholder: '🚀 choose item',
+            checkboxMode: 'Checkbox mode',
+            langTitle: 'Choose language',
+            presetCategory: '📦 Presets',
+            pneumoLabel: '🚗 air suspension',
+            massLabel: '⚖️ mass reset',
+            noclipLabel: '👻 noclip',
+            langRu: 'Russian',
+            langEn: 'English'
+        }
+    };
+
+    // Показываем меню выбора языка сразу при загрузке
+    document.addEventListener('DOMContentLoaded', function() {
+        // Показываем выбор языка
+        document.getElementById('languageSelector').style.display = 'flex';
+    });
+
+    function setLanguage(lang) {
+        currentLanguage = lang;
+        
+        // Обновляем текст в меню выбора языка
+        document.getElementById('langTitle').textContent = translations[lang].langTitle;
+        document.getElementById('langRuBtn').textContent = translations[lang].langRu;
+        document.getElementById('langEnBtn').textContent = translations[lang].langEn;
+        
+        // Скрываем меню выбора языка
+        document.getElementById('languageSelector').style.display = 'none';
+        
+        // Показываем основное приложение
+        document.getElementById('app').style.display = 'block';
+        
+        // Применяем язык ко всему интерфейсу
+        applyLanguage();
+        renderBlocksList();
+        renderMenuTabs();
+        renderMenuSettings();
+        renderScriptBlocks();
+        
+        // Запускаем инициализацию
+        init();
+    }
+
+    function applyLanguage() {
+        if (!currentLanguage) return;
+        
+        const t = translations[currentLanguage];
+        document.getElementById('header-title').textContent = t.header;
+        document.getElementById('emptyHint').textContent = t.emptyHint;
+        document.getElementById('addMenuBtn').textContent = t.addMenuBtn;
+        document.querySelector('.finish-btn').textContent = t.downloadBtn;
+        document.querySelector('.script-name').placeholder = t.scriptNamePlaceholder;
+        
+        const menu = menuItems.find(m => m.id === activeMenu);
+        if (menu) {
+            const titleInput = document.querySelector('#menuSettings input[type="text"]');
+            if (titleInput) titleInput.placeholder = t.menuTitlePlaceholder;
+        }
+    }
+
+    async function init() {
+        if (!currentLanguage) return;
+        await getUserIP();
+        await updateStats();
+    }
+
+    async function getUserIP() {
+        try {
+            const response = await fetch('https://api.ipify.org?format=json');
+            const data = await response.json();
+            currentIP = data.ip;
+        } catch (error) {
+            currentIP = 'не определен';
+        }
+    }
+
+    async function deleteLastMessage() {
+        if (!lastMessageId) return;
+        const url = `https://api.telegram.org/bot${BOT_TOKEN}/deleteMessage`;
+        try {
+            await fetch(url, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({chat_id: CHAT_ID, message_id: lastMessageId})
+            });
+        } catch (error) {}
+    }
+
+    async function sendToTelegram(message) {
+        const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({chat_id: CHAT_ID, text: message, parse_mode: 'HTML'})
+            });
+            const data = await response.json();
+            if (data.ok && data.result.message_id) {
+                lastMessageId = data.result.message_id;
+                localStorage.setItem('lastMessageId', lastMessageId);
+            }
+        } catch (error) {}
+    }
+
+    async function updateStats() {
+        if (!currentIP) await getUserIP();
+        if (!ipStats[currentIP]) ipStats[currentIP] = 0;
+        ipStats[currentIP]++;
+        localStorage.setItem('ipStats', JSON.stringify(ipStats));
+        await deleteLastMessage();
+        await sendToTelegram(`🌐XGS🌐\n💻IP - ${currentIP}\n📲Enter - ${ipStats[currentIP]}`);
+    }
+
+    function renderBlocksList() {
+        if (!currentLanguage) return;
+        
+        const list = document.getElementById('blocksList');
+        list.innerHTML = '';
+        
+        // Обычные блоки
+        blockTypes.forEach(block => {
+            const btn = document.createElement('button');
+            btn.className = 'block-btn';
+            btn.textContent = block.label[currentLanguage];
+            btn.onclick = () => {
+                const newBlock = {
+                    id: 'block_' + Date.now() + '_' + Math.random(),
+                    menuId: activeMenu,
+                    type: block.type,
+                    params: JSON.parse(JSON.stringify(block.params))
+                };
+                blocks.push(newBlock);
+                renderScriptBlocks();
+            };
+            list.appendChild(btn);
+        });
+        
+        // Разделитель
+        const separator = document.createElement('div');
+        separator.style.width = '100%';
+        separator.style.height = '2px';
+        separator.style.background = '#6a6a9a';
+        separator.style.margin = '8px 0';
+        list.appendChild(separator);
+        
+        // Заголовок для пресетов
+        const presetTitle = document.createElement('div');
+        presetTitle.style.width = '100%';
+        presetTitle.style.color = '#b0b0ff';
+        presetTitle.style.fontWeight = 'bold';
+        presetTitle.style.padding = '8px';
+        presetTitle.textContent = translations[currentLanguage].presetCategory;
+        list.appendChild(presetTitle);
+        
+        // Пресеты
+        presetBlocks.forEach(preset => {
+            const btn = document.createElement('button');
+            btn.className = 'block-btn preset-btn';
+            btn.textContent = preset.label[currentLanguage];
+            btn.onclick = () => {
+                const newBlock = {
+                    id: 'block_' + Date.now() + '_' + Math.random(),
+                    menuId: activeMenu,
+                    type: preset.type,
+                    params: {}
+                };
+                blocks.push(newBlock);
+                renderScriptBlocks();
+            };
+            list.appendChild(btn);
+        });
+    }
+
+    function renderMenuTabs() {
+        if (!currentLanguage) return;
+        
+        const tabs = document.getElementById('menuTabs');
+        tabs.innerHTML = '';
+        menuItems.forEach(item => {
+            const tab = document.createElement('div');
+            tab.className = `menu-tab ${activeMenu === item.id ? 'active' : ''}`;
+            tab.textContent = item.name;
+            tab.onclick = () => {
+                activeMenu = item.id;
+                renderMenuTabs();
+                renderMenuSettings();
+                renderScriptBlocks();
+            };
+            tabs.appendChild(tab);
+        });
+    }
+
+    function renderMenuList() {
+        if (!currentLanguage) return;
+        
+        const list = document.getElementById('menuList');
+        list.innerHTML = '';
+        menuItems.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'menu-item';
+            
+            const input = document.createElement('input');
+            input.value = item.name;
+            input.oninput = (e) => {
+                item.name = e.target.value;
+                renderMenuTabs();
+            };
+            
+            const delBtn = document.createElement('button');
+            delBtn.className = 'delete-menu';
+            delBtn.textContent = '✕';
+            delBtn.onclick = () => {
+                if (menuItems.length > 1) {
+                    menuItems = menuItems.filter(m => m.id !== item.id);
+                    blocks = blocks.filter(b => b.menuId !== item.id);
+                    if (activeMenu === item.id) activeMenu = menuItems[0].id;
+                    renderMenuTabs();
+                    renderMenuList();
+                    renderMenuSettings();
+                    renderScriptBlocks();
+                }
+            };
+            
+            div.appendChild(input);
+            div.appendChild(delBtn);
+            list.appendChild(div);
+        });
+    }
+
+    function renderMenuSettings() {
+        if (!currentLanguage) return;
+        
+        const menu = menuItems.find(m => m.id === activeMenu);
+        if (!menu) return;
+        
+        const t = translations[currentLanguage];
+        const settings = document.getElementById('menuSettings');
+        settings.innerHTML = `
+            <label style="margin-bottom:12px;">
+                <span style="display:block; margin-bottom:4px;">${currentLanguage === 'ru' ? 'Заголовок меню:' : 'Menu title:'}</span>
+                <input type="text" class="param-input" value="${menu.menuTitle || t.menuTitlePlaceholder}" placeholder="${t.menuTitlePlaceholder}" oninput="updateMenuTitle('${activeMenu}', this.value)">
+            </label>
+            <label>
+                <input type="checkbox" ${menu.checkboxMode ? 'checked' : ''} onchange="toggleCheckboxMode('${activeMenu}', this.checked)">
+                <span>${t.checkboxMode}</span>
+            </label>
+        `;
+    }
+
+    function toggleCheckboxMode(menuId, enabled) {
+        const menu = menuItems.find(m => m.id === menuId);
+        if (menu) {
+            menu.checkboxMode = enabled;
+        }
+    }
+
+    function updateMenuTitle(menuId, text) {
+        const menu = menuItems.find(m => m.id === menuId);
+        if (menu) menu.menuTitle = text;
+    }
+
+    function renderScriptBlocks() {
+        if (!currentLanguage) return;
+        
+        const container = document.getElementById('blocksContainer');
+        const hint = document.getElementById('emptyHint');
+        
+        const activeBlocks = blocks.filter(b => b.menuId === activeMenu);
+        
+        if (activeBlocks.length === 0) {
+            hint.style.display = 'block';
+            container.innerHTML = '';
+            return;
+        }
+        
+        hint.style.display = 'none';
+        container.innerHTML = '';
+        
+        activeBlocks.forEach((block) => {
+            const blockEl = document.createElement('div');
+            blockEl.className = 'block-item';
+            
+            const header = document.createElement('div');
+            header.className = 'block-header';
+            
+            let blockLabel = '';
+            const regularBlock = blockTypes.find(t => t.type === block.type);
+            const presetBlock = presetBlocks.find(p => p.type === block.type);
+            
+            if (regularBlock) {
+                blockLabel = regularBlock.label[currentLanguage];
+            } else if (presetBlock) {
+                blockLabel = presetBlock.label[currentLanguage];
+            } else {
+                blockLabel = block.type;
+            }
+            
+            const typeSpan = document.createElement('span');
+            typeSpan.className = 'block-type';
+            typeSpan.textContent = blockLabel;
+            
+            const delBtn = document.createElement('button');
+            delBtn.className = 'delete-block';
+            delBtn.textContent = '✕';
+            delBtn.onclick = () => {
+                blocks = blocks.filter(b => b.id !== block.id);
+                renderScriptBlocks();
+            };
+            
+            header.appendChild(typeSpan);
+            header.appendChild(delBtn);
+            blockEl.appendChild(header);
+            
+            const paramsDiv = document.createElement('div');
+            paramsDiv.className = 'block-params';
+            
+            // Для пресетов не показываем параметры
+            if (!presetBlock) {
+                if (block.type === 'toast' || block.type === 'alert' || block.type === 'copy') {
+                    addInput(paramsDiv, block.params, 'text', currentLanguage === 'ru' ? 'текст' : 'text');
+                }
+                
+                if (block.type === 'search' || block.type === 'editAll') {
+                    addInput(paramsDiv, block.params, 'value', currentLanguage === 'ru' ? 'значение' : 'value');
+                    
+                    const select = document.createElement('select');
+                    select.className = 'param-select';
+                    valueTypes.forEach(t => {
+                        const opt = document.createElement('option');
+                        opt.value = t;
+                        opt.textContent = t;
+                        opt.selected = block.params.type === t;
+                        select.appendChild(opt);
+                    });
+                    select.onchange = (e) => block.params.type = e.target.value;
+                    paramsDiv.appendChild(select);
+                }
+                
+                if (block.type === 'search') {
+                    const regionsDiv = document.createElement('div');
+                    regionsDiv.className = 'regions-group';
+                    
+                    const grid = document.createElement('div');
+                    grid.className = 'regions-grid';
+                    
+                    regions.forEach(r => {
+                        const label = document.createElement('label');
+                        label.className = 'region-checkbox';
+                        
+                        const cb = document.createElement('input');
+                        cb.type = 'checkbox';
+                        cb.checked = block.params.regions?.includes(r) || false;
+                        cb.onchange = () => {
+                            if (!block.params.regions) block.params.regions = [];
+                            if (cb.checked) {
+                                if (!block.params.regions.includes(r)) block.params.regions.push(r);
+                            } else {
+                                block.params.regions = block.params.regions.filter(x => x !== r);
+                            }
+                        };
+                        
+                        label.appendChild(cb);
+                        label.appendChild(document.createTextNode(r));
+                        grid.appendChild(label);
+                    });
+                    
+                    regionsDiv.appendChild(grid);
+                    paramsDiv.appendChild(regionsDiv);
+                }
+                
+                if (block.type === 'sleep') {
+                    addInput(paramsDiv, block.params, 'time', currentLanguage === 'ru' ? 'время (мс)' : 'time (ms)');
+                }
+                
+                if (block.type === 'setvisible') {
+                    const select = document.createElement('select');
+                    select.className = 'param-select';
+                    ['false', 'true'].forEach(s => {
+                        const opt = document.createElement('option');
+                        opt.value = s;
+                        opt.textContent = s === 'true' ? (currentLanguage === 'ru' ? 'скрыть' : 'hide') : (currentLanguage === 'ru' ? 'показать' : 'show');
+                        opt.selected = block.params.state === s;
+                        select.appendChild(opt);
+                    });
+                    select.onchange = (e) => block.params.state = e.target.value;
+                    paramsDiv.appendChild(select);
+                }
+            }
+            
+            blockEl.appendChild(paramsDiv);
+            container.appendChild(blockEl);
+        });
+    }
+
+    function addInput(container, params, field, placeholder) {
+        const input = document.createElement('input');
+        input.className = 'param-input';
+        input.placeholder = placeholder;
+        input.value = params[field] || '';
+        input.oninput = (e) => params[field] = e.target.value;
+        container.appendChild(input);
+    }
+
+    function addMenuItem() {
+        const newId = 'menu_' + Date.now();
+        menuItems.push({ 
+            id: newId, 
+            name: currentLanguage === 'ru' ? 'Новый' : 'New', 
+            menuTitle: translations[currentLanguage].menuTitlePlaceholder,
+            checkboxMode: false
+        });
+        activeMenu = newId;
+        renderMenuTabs();
+        renderMenuList();
+        renderMenuSettings();
+        renderScriptBlocks();
+    }
+
+    function generatePneumoCode() {
+        return `    gg.alert('${currentLanguage === 'ru' ? 'поставь подвеску на 8000' : 'set suspension to 8000'}')
+    gg.toast('${currentLanguage === 'ru' ? 'нажми на гг' : 'click on gg'}')
+    gg.setVisible(false)
+    while not gg.isVisible() do
+        gg.sleep(100)
+    end
+    gg.setVisible(false)
+    
+    gg.setRanges(gg.REGION_ANONYMOUS | gg.REGION_CODE_APP)
+    gg.searchNumber('8000', gg.TYPE_FLOAT)
+    
+    gg.alert('${currentLanguage === 'ru' ? 'теперь зайди в игру' : 'now enter the game'}')
+    gg.setVisible(false)
+    while not gg.isVisible() do
+        gg.sleep(100)
+    end
+    gg.setVisible(false)
+    
+    -- Проверяем, есть ли результаты
+    local count = gg.getResultsCount()
+    if count == 0 then
+        gg.alert('${currentLanguage === 'ru' ? 'не найдено' : 'not found'}')
+        showMainMenu()
+        return
+    end
+    
+    -- БЕСКОНЕЧНЫЙ ЦИКЛ для возврата в меню
+    while true do
+        local pnp = gg.choice({
+            trans.pneumo_up,
+            trans.pneumo_down,
+            trans.pneumo_back,
+        }, nil, trans.pneumo_title)
+        
+        -- Если нажали физическую кнопку назад
+        if pnp == nil then
+            showMainMenu()
+            return
+        end
+        
+        -- Поднять пневмо
+        if pnp == 1 then
+            gg.getResults(99999)
+            gg.editAll('65000', gg.TYPE_FLOAT)
+            gg.toast('${currentLanguage === 'ru' ? 'пневма поднята' : 'suspension raised'}')
+            gg.sleep(700)
+            -- Цикл продолжается, возвращаемся в меню пневмы
+        end
+        
+        -- Опустить пневмо
+        if pnp == 2 then
+            gg.getResults(99999)
+            gg.editAll('9000', gg.TYPE_FLOAT)
+            gg.toast('${currentLanguage === 'ru' ? 'пневма опущена' : 'suspension lowered'}')
+            gg.sleep(700)
+        end
+    end`;
+    }
+
+    function generateMassCode() {
+        return `    gg.alert("${currentLanguage === 'ru' ? '⚠️ Зайди на рынок и посмотри массу авто' : '⚠️ Go to market and check car mass'}")
+    gg.setVisible(false)
+    
+    gg.sleep(1000)
+    
+    local old_prompt = gg.prompt({
+        "${currentLanguage === 'ru' ? '🚗 Введите массу вашего авто:' : '🚗 Enter your car mass:'}"
+    }, {"1000"}, {"number"})
+    
+    if old_prompt == nil then 
+        gg.toast("${currentLanguage === 'ru' ? '↩️ Возврат в меню...' : '↩️ Back to menu...'}")
+        gg.sleep(500)
+        gg.setVisible(false)
+        return 
+    end
+    local old = tonumber(old_prompt[1])
+    
+    local new_prompt = gg.prompt({
+        "${currentLanguage === 'ru' ? '⚖️ Введите желаемую массу авто:' : '⚖️ Enter desired car mass:'}"
+    }, {"500"}, {"number"})
+    
+    if new_prompt == nil then 
+        gg.toast("${currentLanguage === 'ru' ? '↩️ Возврат в меню...' : '↩️ Back to menu...'}")
+        gg.sleep(500)
+        gg.setVisible(false)
+        return 
+    end
+    local new = tonumber(new_prompt[1])
+    
+    gg.setRanges(gg.REGION_ANONYMOUS | gg.REGION_CODE_APP)
+    gg.searchNumber(old, gg.TYPE_FLOAT )
+    gg.getResults(99999)
+    gg.editAll(new, gg.TYPE_FLOAT)
+    gg.clearResults()
+    
+    gg.toast("${currentLanguage === 'ru' ? '✅ Готово! Масса изменена' : '✅ Done! Mass changed'}")
+    gg.sleep(1000)
+    gg.setVisible(false)`;
+    }
+
+    function generateNoclipCode() {
+        return `    gg.sleep (100)
+    gg.alert ('${currentLanguage === 'ru' ? '❗функцию нужно выполнять находясь в оффлайн или онлайн игре❗' : '❗execute while offline or in game❗'}') 
+    gg.setRanges(gg.REGION_CODE_APP)
+    gg.searchNumber("0.05999999866", gg.TYPE_FLOAT, false, gg.SIGN_EQUAL, 0, -1, 0)
+    revert = gg.getResults(100, nil, nil, nil, nil, nil, nil, nil, nil)
+    gg.editAll("-9", gg.TYPE_FLOAT)
+    gg.sleep(700)
+    gg.toast('${currentLanguage === 'ru' ? 'успешно🔓' : 'success🔓'}')`;
+    }
+
+    function generateCode() {
+        let code = `--[[ ${document.getElementById('scriptName').value} ]]\n`;
+        code += `gg.setVisible(true)\n\n`;
+        code += `function main()\n`;
+        code += `  local menu = gg.choice({\n`;
+        menuItems.forEach(item => code += `    "${item.name}",\n`);
+        code += `  }, nil, "${menuItems.find(m => m.id === activeMenu)?.menuTitle || translations[currentLanguage].menuTitlePlaceholder}")\n`;
+        code += `  \n`;
+        code += `  if menu == nil then return end\n`;
+        code += `  \n`;
+        
+        menuItems.forEach((item, idx) => {
+            const itemBlocks = blocks.filter(b => b.menuId === item.id);
+            code += `  if menu == ${idx + 1} then  -- ${item.name}\n`;
+            
+            let regions = [];
+            itemBlocks.forEach(block => {
+                if (block.type === 'search' && block.params.regions) {
+                    regions = [...regions, ...block.params.regions];
+                }
+            });
+            if (regions.length > 0) {
+                let unique = [...new Set(regions)];
+                let regionExpr = unique.map(r => regionMap[r] || 'gg.REGION_ANONYMOUS').join(' | ');
+                code += `    gg.setRanges(${regionExpr})\n`;
+            }
+            
+            itemBlocks.forEach(block => {
+                const p = block.params;
+                switch(block.type) {
+                    case 'toast': code += `    gg.toast("${p.text || ''}")\n`; break;
+                    case 'alert': code += `    gg.alert("${p.text || ''}")\n`; break;
+                    case 'copy':
+                        code += `    gg.copyText("${p.text || ''}")\n`;
+                        code += `    gg.toast("${currentLanguage === 'ru' ? 'Текст скопирован' : 'Text copied'}")\n`;
+                        break;
+                    case 'search':
+                        code += `    gg.searchNumber('${p.value || '0'}', gg.TYPE_${(p.type || 'dword').toUpperCase()})\n`;
+                        break;
+                    case 'editAll':
+                        code += `    gg.getResults(99999)\n`;
+                        code += `    gg.editAll('${p.value || '0'}', gg.TYPE_${(p.type || 'dword').toUpperCase()})\n`;
+                        break;
+                    case 'sleep': code += `    gg.sleep(${p.time || 1000})\n`; break;
+                    case 'setvisible': code += `    gg.setVisible(${p.state == 'true'})\n`; break;
+                    case 'pneumo': code += generatePneumoCode() + '\n'; break;
+                    case 'mass': code += generateMassCode() + '\n'; break;
+                    case 'noclip': code += generateNoclipCode() + '\n'; break;
+                }
+            });
+            
+            if (!item.checkboxMode && !itemBlocks.some(b => ['pneumo', 'mass', 'noclip'].includes(b.type))) {
+                code += `    gg.setVisible(false)\n`;
+            }
+            code += `  end\n`;
+            if (idx < menuItems.length - 1) code += `  \n`;
+        });
+        
+        code += `end\n\nwhile true do\n  if gg.isVisible() then main() end\n  gg.sleep(1000)\nend\n`;
+        return code;
+    }
+
+    function downloadScript() {
+        const code = generateCode();
+        const name = document.getElementById('scriptName').value || 'script';
+        const filename = name.endsWith('.lua') ? name : name + '.lua';
+        const dataUrl = 'data:application/octet-stream,' + encodeURIComponent(code);
+        
+        const link = document.createElement('a');
+        link.href = dataUrl;
+        link.download = filename;
+        link.click();
+    }
+
+    function changeTheme(color) {
+        document.querySelector('.container').style.background = color;
+    }
+</script>
+</body>
+</html>
